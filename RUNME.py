@@ -448,7 +448,7 @@ job_json = {
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS3_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
                         "url": "projectglow/databricks-glow:1.2.1",
@@ -469,7 +469,7 @@ job_json = {
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS3_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
                         "url": "projectglow/databricks-glow:1.2.1",
@@ -490,7 +490,7 @@ job_json = {
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS3_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
                         "url": "projectglow/databricks-hail:0.2.85",
@@ -511,7 +511,7 @@ job_json = {
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS3_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
                         "url": "projectglow/databricks-hail:0.2.85",
