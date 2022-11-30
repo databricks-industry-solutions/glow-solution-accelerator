@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md 
-# MAGIC You may find this series of notebooks at https://github.com/databricks-industry-solutions/glow-solution-accelerator. For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/genome-wide-association-studies.
+# MAGIC For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/genome-wide-association-studies. Due to the length and complexity, this website does not display the full set of notebooks. You may find the full set of notebooks at https://github.com/databricks-industry-solutions/glow-solution-accelerator. 
 
 # COMMAND ----------
 
