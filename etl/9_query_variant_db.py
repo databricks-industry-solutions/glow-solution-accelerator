@@ -11,7 +11,7 @@ import pyspark.sql.functions as fx
 
 # COMMAND ----------
 
-variants_df = spark.table("variant_db.exploded")
+variants_df = spark.table("{0}.exploded".format(variant_db_name))
 display(variants_df)
 
 # COMMAND ----------
@@ -39,7 +39,7 @@ def get_random_variant(df, seed=0):
 # COMMAND ----------
 
 chrom, start, sampleId = get_random_variant(variants_df, seed=42)
-spark.sql("select * from variant_db.exploded where contigName = '{0}' and start == {1} and sampleId = '{2}'".format(chrom, start, sampleId)).collect()
+spark.sql("select * from {0}.exploded where contigName = '{1}' and start == {2} and sampleId = '{3}'".format(variant_db_name, chrom, start, sampleId)).collect()
 
 # COMMAND ----------
 
@@ -49,7 +49,7 @@ spark.sql("select * from variant_db.exploded where contigName = '{0}' and start 
 # COMMAND ----------
 
 chrom, start, sampleId = get_random_variant(variants_df, seed=84)
-spark.sql("select `calls` from variant_db.exploded where contigName = '{0}' and start == {1} and sampleId = '{2}'".format(chrom, start, sampleId)).collect()
+spark.sql("select `calls` from {0}.exploded where contigName = '{1}' and start == {2} and sampleId = '{3}'".format(variant_db_name, chrom, start, sampleId)).collect()
 
 # COMMAND ----------
 
