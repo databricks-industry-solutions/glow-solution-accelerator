@@ -29,7 +29,7 @@ dbutils.fs.mkdirs(dbfs_home_path_str + "genomics/")
 # COMMAND ----------
 
 # MAGIC %sh
-# MAGIC declare -a chroms=("21" "22")
+# MAGIC declare -a chroms=("1" "22")
 # MAGIC 
 # MAGIC for i in "${chroms[@]}"; do wget ftp://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/ALL.chr$i.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz; done
 # MAGIC 
