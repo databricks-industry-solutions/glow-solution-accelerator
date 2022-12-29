@@ -45,9 +45,9 @@ job_json = {
         "max_concurrent_runs": 1,
         "tasks": [
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/data/download_1000G"
+                    "notebook_path": f"etl/data/download_1000G"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -55,9 +55,9 @@ job_json = {
                 "description": ""
             },
             {
-                "job_cluster_key": "single_node",
+                "job_cluster_key": "gwas_single_node",
                 "notebook_task": {
-                    "notebook_path": f"/etl/1_simulate_covariates_phenotypes_offset"
+                    "notebook_path": f"etl/1_simulate_covariates_phenotypes_offset"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -69,9 +69,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/2_simulate_delta_pvcf"
+                    "notebook_path": f"etl/2_simulate_delta_pvcf"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -83,9 +83,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/3_delta_to_vcf"
+                    "notebook_path": f"etl/3_delta_to_vcf"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -97,9 +97,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/pipe-transformer-plink"
+                    "notebook_path": f"tertiary/pipe-transformer-plink"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -111,9 +111,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/10_liftOver"
+                    "notebook_path": f"etl/10_liftOver"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -125,9 +125,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/parallel_bcftools_filter"
+                    "notebook_path": f"tertiary/parallel_bcftools_filter"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -139,9 +139,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/0_ingest_vcf2delta"
+                    "notebook_path": f"tertiary/0_ingest_vcf2delta"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -153,7 +153,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail",
+                "job_cluster_key": "hail_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -167,7 +167,7 @@ job_json = {
                     }
                 ],
                 "notebook_task": {
-                    "notebook_path": f"/etl/4_vcf_to_hail_mt"
+                    "notebook_path": f"etl/4_vcf_to_hail_mt"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -179,7 +179,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail_to_glow",
+                "job_cluster_key": "hail_to_glow_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -193,7 +193,7 @@ job_json = {
                     }
                 ],
                 "notebook_task": {
-                    "notebook_path": f"/etl/5_hail_mt_to_glow"
+                    "notebook_path": f"etl/5_hail_mt_to_glow"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -205,9 +205,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/1_quality_control"
+                    "notebook_path": f"tertiary/1_quality_control"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -219,9 +219,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/6_explode_variant_dataframe"
+                    "notebook_path": f"etl/6_explode_variant_dataframe"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -233,18 +233,18 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/7_etl_gff_annotations"
+                    "notebook_path": f"etl/7_etl_gff_annotations"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
                 "task_key": "generate_gff3_annotations"
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/8_create_database_for_querying"
+                    "notebook_path": f"etl/8_create_database_for_querying"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -259,9 +259,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/etl/9_query_variant_db"
+                    "notebook_path": f"etl/9_query_variant_db"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -273,9 +273,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/2_quantitative_glowgr"
+                    "notebook_path": f"tertiary/2_quantitative_glowgr"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -290,9 +290,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/3_linear_gwas_glow",
+                    "notebook_path": f"tertiary/3_linear_gwas_glow",
                     "base_parameters": {
                         "user": get_username() # to pass user email into R
                     }
@@ -307,9 +307,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/4_binary_glowgr"
+                    "notebook_path": f"tertiary/4_binary_glowgr"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -321,9 +321,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/5_logistic_gwas_glow"
+                    "notebook_path": f"tertiary/5_logistic_gwas_glow"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -335,7 +335,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail",
+                "job_cluster_key": "hail_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -349,7 +349,7 @@ job_json = {
                     }
                 ],
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/6_hail_linreg_gwas"
+                    "notebook_path": f"tertiary/6_hail_linreg_gwas"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -364,7 +364,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail",
+                "job_cluster_key": "hail_scale_test",
                 "libraries": [
                     {
                         "maven": {
@@ -378,7 +378,7 @@ job_json = {
                     }
                 ],
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/7_hail_logistic_gwas"
+                    "notebook_path": f"tertiary/7_hail_logistic_gwas"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -393,7 +393,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail",
+                "job_cluster_key": "hail_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -407,7 +407,7 @@ job_json = {
                     }
                 ],
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/9_compare_hail_to_glow"
+                    "notebook_path": f"tertiary/9_compare_hail_to_glow"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -425,9 +425,9 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "notebook_task": {
-                    "notebook_path": f"/tertiary/8_pipeline_runs_comparison"
+                    "notebook_path": f"tertiary/8_pipeline_runs_comparison"
                 },
                 "timeout_seconds": 0,
                 "email_notifications": {},
@@ -441,14 +441,14 @@ job_json = {
         ],
         "job_clusters": [
             {
-                "job_cluster_key": "glow_integration_test",
+                "job_cluster_key": "glow_integration_scale_test",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i4i.16xlarge", "MSA": "Standard_L16as_v3", "GCP": "n2-highmem-16"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
                         "url": "projectglow/databricks-glow:1.2.1",
@@ -458,18 +458,18 @@ job_json = {
                         }
                     },
                     "data_security_mode": "NONE",
-                    "num_workers": 2
+                    "num_workers": 12
                 }
             },
             {
-                "job_cluster_key": "single_node",
+                "job_cluster_key": "gwas_single_node",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i4i.4xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
                         "url": "projectglow/databricks-glow:1.2.1",
@@ -483,45 +483,45 @@ job_json = {
                 }
             },
             {
-                "job_cluster_key": "hail",
+                "job_cluster_key": "hail_scale_test",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i4i.8xlarge", "MSA": "Standard_L8as_v3", "GCP": "n2-highmem-8"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
-                        "url": "projectglow/databricks-hail:0.2.85",
+                        "url": "projectglow/databricks-hail:0.2.93",
                         "basic_auth": {
                             "username": docker_username,
                             "password": docker_password
                         }
                     },
                     "data_security_mode": "NONE",
-                    "num_workers": 2
+                    "num_workers": 12
                 }
             },
             {
-                "job_cluster_key": "hail_to_glow",
+                "job_cluster_key": "hail_to_glow_scale_test",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
                     "spark_conf": {
                         "spark.databricks.delta.preview.enabled": "true"
                     },
-                    "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
+                    "node_type_id": {"AWS": "i4i.8xlarge", "MSA": "Standard_L8as_v3", "GCP": "n2-highmem-8"},
                     "enable_elastic_disk": "true",
                     "docker_image": {
-                        "url": "projectglow/databricks-hail:0.2.85",
+                        "url": "projectglow/databricks-hail:0.2.93",
                         "basic_auth": {
                             "username": docker_username,
                             "password": docker_password
                         }
                     },
                     "data_security_mode": "NONE",
-                    "num_workers": 2
+                    "num_workers": 12
                 }
             }
         ]
