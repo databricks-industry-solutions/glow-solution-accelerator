@@ -24,12 +24,14 @@ dbutils.fs.mkdirs(dbfs_home_path_str + "genomics/")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### download 1000G data for chrom 21 and 22
+# MAGIC ##### download 1000G data for chrom 1, 2, 3, 4, 20, 21 and 22
+# MAGIC 
+# MAGIC We download the largest chromosome (1), the smallest chromosome (22), and a selection of others such that we can simulate up to 2 MM variants
 
 # COMMAND ----------
 
 # MAGIC %sh
-# MAGIC declare -a chroms=("1" "22")
+# MAGIC declare -a chroms=("1" "2" "3" "4" "20" "21" "22")
 # MAGIC 
 # MAGIC for i in "${chroms[@]}"; do wget ftp://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/ALL.chr$i.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz; done
 # MAGIC 
