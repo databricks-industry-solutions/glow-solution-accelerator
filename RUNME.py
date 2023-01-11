@@ -45,7 +45,7 @@ job_json = {
         "max_concurrent_runs": 1,
         "tasks": [
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"etl/data/download_1000G"
                 },
@@ -69,7 +69,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"etl/2_simulate_delta_pvcf"
                 },
@@ -83,7 +83,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"etl/3_delta_to_vcf"
                 },
@@ -97,7 +97,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"tertiary/pipe-transformer-plink"
                 },
@@ -111,7 +111,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"etl/10_liftOver"
                 },
@@ -125,7 +125,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"tertiary/parallel_bcftools_filter"
                 },
@@ -139,7 +139,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"tertiary/0_ingest_vcf2delta"
                 },
@@ -153,7 +153,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail_scale_test",
+                "job_cluster_key": "gwas_hail_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -179,7 +179,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail_to_glow_scale_test",
+                "job_cluster_key": "gwas_hail_to_glow_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -205,7 +205,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"tertiary/1_quality_control"
                 },
@@ -219,7 +219,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"etl/6_explode_variant_dataframe"
                 },
@@ -233,7 +233,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"etl/7_etl_gff_annotations"
                 },
@@ -242,7 +242,7 @@ job_json = {
                 "task_key": "generate_gff3_annotations"
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"etl/8_create_database_for_querying"
                 },
@@ -259,7 +259,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"etl/9_query_variant_db"
                 },
@@ -273,7 +273,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"tertiary/2_quantitative_glowgr"
                 },
@@ -290,7 +290,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"tertiary/3_linear_gwas_glow",
                     "base_parameters": {
@@ -307,7 +307,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"tertiary/4_binary_glowgr"
                 },
@@ -321,7 +321,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "notebook_task": {
                     "notebook_path": f"tertiary/5_logistic_gwas_glow"
                 },
@@ -335,7 +335,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail_scale_test",
+                "job_cluster_key": "gwas_hail_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -364,7 +364,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail_scale_test",
+                "job_cluster_key": "gwas_hail_scale_test",
                 "libraries": [
                     {
                         "maven": {
@@ -393,7 +393,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "hail_scale_test",
+                "job_cluster_key": "gwas_hail_scale_test",
                 "libraries": [
                     {
                         "pypi": {
@@ -425,7 +425,7 @@ job_json = {
                 ]
             },
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
                 "notebook_task": {
                     "notebook_path": f"tertiary/8_pipeline_runs_comparison"
                 },
@@ -441,7 +441,7 @@ job_json = {
         ],
         "job_clusters": [
             {
-                "job_cluster_key": "glow_integration_scale_test",
+                "job_cluster_key": "gwas_glow_integration_scale_test_photon",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
@@ -461,6 +461,27 @@ job_json = {
                     "num_workers": 12
                 }
             },
+            {
+                "job_cluster_key": "gwas_glow_integration_scale_test_standard",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "10.4.x-scala2.12",
+                    "spark_conf": {
+                        "spark.databricks.delta.preview.enabled": "true"
+                    },
+                    "node_type_id": {"AWS": "i4i.16xlarge", "MSA": "Standard_L16as_v3", "GCP": "n2-highmem-16"},
+                    "enable_elastic_disk": "true",
+                    "docker_image": {
+                        "url": "projectglow/databricks-glow:1.2.1",
+                        "basic_auth": {
+                            "username": docker_username,
+                            "password": docker_password
+                        }
+                    },
+                    "data_security_mode": "NONE",
+                    "num_workers": 12
+                }
+            },            
             {
                 "job_cluster_key": "gwas_single_node",
                 "new_cluster": {
@@ -483,7 +504,7 @@ job_json = {
                 }
             },
             {
-                "job_cluster_key": "hail_scale_test",
+                "job_cluster_key": "gwas_hail_scale_test",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
@@ -504,7 +525,7 @@ job_json = {
                 }
             },
             {
-                "job_cluster_key": "hail_to_glow_scale_test",
+                "job_cluster_key": "gwas_hail_to_glow_scale_test",
                 "new_cluster": {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
