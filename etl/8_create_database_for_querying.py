@@ -35,15 +35,15 @@ spark.sql("drop table if exists variant_db.pvcf")
 
 # COMMAND ----------
 
-spark.sql("create table {0}.exploded using delta location '{1}'".format(variant_db_name, output_exploded_delta))
+spark.sql("create table if not exists {0}.exploded using delta location '{1}'".format(variant_db_name, output_exploded_delta))
 
 # COMMAND ----------
 
-spark.sql("create table {0}.annotations using delta location '{1}'".format(variant_db_name, gff_annotations))
+spark.sql("create table if not exists {0}.annotations using delta location '{1}'".format(variant_db_name, gff_annotations))
 
 # COMMAND ----------
 
-spark.sql("create table {0}.pvcf using delta location '{1}'".format(variant_db_name, output_simulated_delta))
+spark.sql("create table if not exists {0}.pvcf using delta location '{1}'".format(variant_db_name, output_simulated_delta))
 
 # COMMAND ----------
 
@@ -54,7 +54,7 @@ spark.sql("create table {0}.pvcf using delta location '{1}'".format(variant_db_n
 
 # COMMAND ----------
 
-display(spark.sql("OPTIMIZE variant_db.exploded ZORDER BY (contigName, start)"))
+display(spark.sql("OPTIMIZE {0}.exploded ZORDER BY (contigName, start)".format(variant_db_name)))
 
 # COMMAND ----------
 
