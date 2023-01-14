@@ -27,10 +27,20 @@ def remove_invalid_characters_from_columns(df, character, replacement):
 
 # COMMAND ----------
 
+import os
+
+# COMMAND ----------
+
 user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')
-os.environ['user']= user
+os.environ['user'] = user
+os_path = "/dbfs/home/" + user + "/gwas/"
+os.environ['path'] = os_path
 path = "dbfs:/home/" + user + "/gwas/"
 dbutils.fs.mkdirs(path)
+
+# COMMAND ----------
+
+dbutils.fs.ls(path)
 
 # COMMAND ----------
 
@@ -49,10 +59,18 @@ dbutils.fs.mkdirs(path)
 
 # COMMAND ----------
 
+# MAGIC %sh ls
+
+# COMMAND ----------
+
 # MAGIC %sh
-# MAGIC mv alternative /dbfs/$user/gwas/gwas_catalog_alternative.tsv
-# MAGIC mv full /dbfs/home/$user/gwas/gwas_catalog_full.tsv
-# MAGIC mv ancestry /dbfs/home/$user/gwas/gwas_catalog_ancestry.tsv
+# MAGIC mv alternative $path/gwas_catalog_alternative.tsv
+# MAGIC mv full $path/gwas_catalog_full.tsv
+# MAGIC mv ancestry $path/gwas_catalog_ancestry.tsv
+
+# COMMAND ----------
+
+# MAGIC %sh ls $path
 
 # COMMAND ----------
 
@@ -94,7 +112,7 @@ ancestry_df.write.format("delta").mode("overwrite").save(path + "gwas_catalog_an
 
 # COMMAND ----------
 
-# spark.sql("create database gwas_catalog")
+# spark.sql("create database if not exists gwas_catalog")
 
 # COMMAND ----------
 
