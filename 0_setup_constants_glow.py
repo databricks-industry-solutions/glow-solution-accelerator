@@ -399,3 +399,12 @@ print("exploded genotype paths", json.dumps({
   "gff_annotations": gff_annotations
 }
 , indent=4))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ##### gene overlap variants
+
+# COMMAND ----------
+
+gene_overlap_variants_delta = str(dbfs_home_path / f'genomics/data/delta/gene_overlap_variants.delta')
