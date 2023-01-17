@@ -27,7 +27,13 @@
 
 # COMMAND ----------
 
-spark.conf.set("spark.sql.codegen.wholeStage", True)
+spark.conf.set("spark.sql.codegen.wholeStage", False)
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
 
 # COMMAND ----------
 
