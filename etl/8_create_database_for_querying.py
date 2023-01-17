@@ -54,8 +54,24 @@ spark.sql("create table if not exists {0}.pvcf using delta location '{1}'".forma
 
 # COMMAND ----------
 
+display(spark.sql("OPTIMIZE {0}.annotations ZORDER BY (contigName, start)".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("DESCRIBE HISTORY {0}.annotations".format(variant_db_name)))
+
+# COMMAND ----------
+
 display(spark.sql("OPTIMIZE {0}.exploded ZORDER BY (contigName, start)".format(variant_db_name)))
 
 # COMMAND ----------
 
 display(spark.sql("DESCRIBE HISTORY {0}.exploded".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("OPTIMIZE {0}.pvcf ZORDER BY (contigName, start)".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("OPTIMIZE {0}.pvcf ZORDER BY (contigName, start)".format(variant_db_name)))

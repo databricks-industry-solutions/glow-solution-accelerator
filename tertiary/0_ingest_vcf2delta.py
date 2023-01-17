@@ -20,6 +20,10 @@
 
 # COMMAND ----------
 
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### read VCF
 
@@ -36,11 +40,22 @@ start_time = time.time()
 
 # COMMAND ----------
 
-spark.read.format("vcf").load(output_vcf) \
-                        .write \
-                        .format("delta") \
-                        .mode("overwrite") \
-                        .save(output_delta_tmp)
+vcf_df = spark.read.format("vcf").load(output_vcf) 
+
+# COMMAND ----------
+
+vcf_df.write \
+      .format("delta") \
+      .mode("overwrite") \
+      .save(output_delta_tmp)
+
+# COMMAND ----------
+
+# spark.read.format("vcf").load(output_vcf) \
+#                         .write \
+#                         .format("delta") \
+#                         .mode("overwrite") \
+#                         .save(output_delta_tmp)
 
 # COMMAND ----------
 

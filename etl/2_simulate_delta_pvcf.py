@@ -26,6 +26,10 @@
 
 # COMMAND ----------
 
+spark.conf.set("spark.sql.codegen.wholeStage", False)
+
+# COMMAND ----------
+
 vcf = spark.read.format("delta").load(output_vcf_delta)
 total_variants = vcf.count()
 fraction = n_variants / total_variants

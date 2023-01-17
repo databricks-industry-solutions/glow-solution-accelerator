@@ -29,6 +29,10 @@ spark.conf.set("spark.sql.execution.arrow.maxRecordsPerBatch", 100)
 
 # COMMAND ----------
 
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 # MAGIC %r
 # MAGIC install.packages("qqman", repos="http://cran.us.r-project.org")
 # MAGIC library(qqman)

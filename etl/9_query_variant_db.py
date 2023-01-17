@@ -7,7 +7,29 @@
 
 # COMMAND ----------
 
+# MAGIC %md ##### setup constants
+
+# COMMAND ----------
+
+# MAGIC %run ../0_setup_constants_glow
+
+# COMMAND ----------
+
 import pyspark.sql.functions as fx
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", False)
+
+# COMMAND ----------
+
+# spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+# spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+# spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.shuffle.partitions", "1600")
 
 # COMMAND ----------
 
@@ -64,7 +86,7 @@ spark.sql("select `calls` from {0}.exploded where contigName = '{1}' and start =
 
 # COMMAND ----------
 
-genes = spark.sql("select * from variant_db.annotations")
+genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 genes.createOrReplaceTempView("genes")
 spark.table("genes").persist()
 spark.table("genes").count()
@@ -82,6 +104,14 @@ genes_overlap_variants_df = genes.hint("range_join", 10). \
                                        (variants_df.start > genes.start) & 
                                        (variants_df.start <= genes.end), 
                                        "left_semi")
+
+# COMMAND ----------
+
+# genes_overlap_variants_df.write.mode("overwrite").format("delta").save(gene_overlap_variants_delta)
+
+# COMMAND ----------
+
+display(genes_overlap_variants_df)
 
 # COMMAND ----------
 
@@ -113,7 +143,7 @@ def get_gene_coords(df, gene):
 
 sampleId = "532"
 chrom, gene_start, gene_end = get_gene_coords(spark.table("genes"), gene)
-spark.sql("select * from variant_db.exploded where contigName = '{0}' and start >= {1} and end <= {2} and sampleId = '{3}'".format(chrom, gene_start, gene_end, sampleId)).collect()
+spark.sql("select * from {0}.exploded where contigName = '{1}' and start >= {2} and end <= {3} and sampleId = '{4}'".format(variant_db_name, chrom, gene_start, gene_end, sampleId)).collect()
 
 # COMMAND ----------
 

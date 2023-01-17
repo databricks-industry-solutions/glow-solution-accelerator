@@ -24,6 +24,10 @@ spark.conf.set("spark.sql.execution.arrow.maxRecordsPerBatch", 100)
 
 # COMMAND ----------
 
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 method = 'logistic'
 test = 'approx-firth'
 library = 'glow'

@@ -44,12 +44,28 @@ spark.read.format("delta").load(output_delta) \
 
 # COMMAND ----------
 
-spark.read.format("delta").load(output_delta) \
-                          .repartition(n_partitions) \
-                          .write \
-                          .mode("overwrite") \
-                          .format("bigvcf") \
-                          .save(output_vcf)
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
+vcf_df = spark.read.format("delta").load(output_delta) \
+                          .repartition(n_partitions)
+
+# COMMAND ----------
+
+vcf_df.write \
+      .mode("overwrite") \
+      .format("bigvcf") \
+      .save(output_vcf)
+
+# COMMAND ----------
+
+# spark.read.format("delta").load(output_delta) \
+#                           .repartition(n_partitions) \
+#                           .write \
+#                           .mode("overwrite") \
+#                           .format("bigvcf") \
+#                           .save(output_vcf)
 
 # COMMAND ----------
 
