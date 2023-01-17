@@ -112,10 +112,10 @@ ancestry_df.write.format("delta").mode("overwrite").save(path + "gwas_catalog_an
 
 # COMMAND ----------
 
-# spark.sql("create database if not exists gwas_catalog")
+spark.sql("create database if not exists gwas_catalog")
 
 # COMMAND ----------
 
-# spark.sql("create table gwas_catalog.alternative using delta location {}").format(path + "gwas_catalog_alternative.delta")
-# spark.sql("create table gwas_catalog.full using delta location {}").format(path + "gwas_catalog_full.delta")
-# spark.sql("create table gwas_catalog.ancestry using delta location {}").format(path + "gwas_catalog_ancestry.delta")
+spark.sql("create table if not exists gwas_catalog.alternative using delta location '{0}'".format(path + "gwas_catalog_alternative.delta"))
+spark.sql("create table if not exists gwas_catalog.full using delta location '{0}'".format(path + "gwas_catalog_full.delta"))
+spark.sql("create table if not exists gwas_catalog.ancestry using delta location '{0}'".format(path + "gwas_catalog_ancestry.delta"))
