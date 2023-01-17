@@ -61,6 +61,24 @@ vcf.write.mode("overwrite").format("delta").save(output_vcf_delta)
 
 # COMMAND ----------
 
+# MAGIC %md 
+# MAGIC ##### optimize the delta table
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC -- CREATE TABLE alex_barreto_variant_db.1kg_variants_pvcf USING DELTA Location '{0}'.format(output_vcf_delta)
+# MAGIC -- CREATE TABLE alex_barreto_variant_db.1kg_variants_pvcf USING DELTA Location 'dbfs:/home/alex.barreto@databricks.com/genomics/data/delta/1kg_variants_pvcf.delta'
+# MAGIC -- OPTIMIZE alex_barreto_variant_db.1kg_variants_pvcf ZORDER BY contigName
+
+# COMMAND ----------
+
+# from delta.tables import *
+# vcf_delta_table = DeltaTable.forPath(spark, output_vcf_delta)
+# vcf_delta_table.optimize().executeCompaction()
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### read back in and count data
 
