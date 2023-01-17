@@ -20,6 +20,10 @@
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
 spark.conf.set("spark.sql.codegen.wholeStage", True)
 
 # COMMAND ----------

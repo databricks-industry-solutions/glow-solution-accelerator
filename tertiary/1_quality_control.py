@@ -27,10 +27,6 @@
 
 # COMMAND ----------
 
-spark.conf.set("spark.sql.codegen.wholeStage", True)
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ##### adjust spark confs
 # MAGIC 
@@ -38,7 +34,10 @@ spark.conf.set("spark.sql.codegen.wholeStage", True)
 
 # COMMAND ----------
 
-# spark.conf.set("spark.sql.codegen.wholeStage", False)
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
 spark.conf.set("spark.sql.codegen.wholeStage", True)
 
 # COMMAND ----------

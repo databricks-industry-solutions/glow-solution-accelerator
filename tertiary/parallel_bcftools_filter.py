@@ -18,6 +18,14 @@ import subprocess
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 '''
 This will set a spark property AQE to false. This property would otherwise automatically put place many VCF files' processing together under the same core since the raw data in that df dataframe is small (the dataframe is being used to orchestrating tasks, with each row defining parameters for each task) . This is not a desirable result in our specific case. Usually, this property works in favor but not here.
 '''
