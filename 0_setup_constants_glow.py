@@ -137,10 +137,10 @@ print("data storage path constants", json.dumps({
 
 # COMMAND ----------
 
-dbfs_file_path = dbfs_home_path / "genomics/data/pandas/"
+dbfs_file_path = dbfs_home_path / "genomics/standard/data/pandas/"
 dbutils.fs.mkdirs(str(dbfs_file_path))
 
-dbfs_file_fuse_path = dbfs_fuse_home_path / "genomics/data/pandas/"
+dbfs_file_fuse_path = dbfs_fuse_home_path / "genomics/standard/data/pandas/"
 simulate_file_prefix = f"simulate_{n_samples}_samples_"
 
 output_covariates = str(dbfs_file_fuse_path / (simulate_file_prefix + f"{n_covariates}_covariates.csv"))
@@ -162,15 +162,15 @@ print("phenotype simulation paths", json.dumps({
 
 # COMMAND ----------
 
-vcfs_path = str(dbfs_home_path / "genomics/data/1kg-vcfs-autosomes")
-vcfs_path_local = str(dbfs_fuse_home_path / "genomics/data/1kg-vcfs-autosomes")
+vcfs_path = str(dbfs_home_path / "genomics/standard/data/1kg-vcfs-autosomes")
+vcfs_path_local = str(dbfs_fuse_home_path / "genomics/standard/data/1kg-vcfs-autosomes")
 
 os.environ['vcfs_path_local'] = vcfs_path_local
 
-simulate_prefix = str(dbfs_home_path / f"genomics/data/delta/simulate_{n_samples}_samples_{n_variants}")
-simulate_prefix_local = str(dbfs_fuse_home_path / f"genomics/data/delta/simulate_{n_samples}_samples_{n_variants}") 
+simulate_prefix = str(dbfs_home_path / f"genomics/standard/data/delta/simulate_{n_samples}_samples_{n_variants}")
+simulate_prefix_local = str(dbfs_fuse_home_path / f"genomics/standard/data/delta/simulate_{n_samples}_samples_{n_variants}") 
 
-output_vcf_delta = str(dbfs_home_path / f'genomics/data/delta/1kg_variants_pvcf.delta')
+output_vcf_delta = str(dbfs_home_path / f'genomics/standard/data/delta/1kg_variants_pvcf.delta')
 output_simulated_delta = simulate_prefix + '_variants_pvcf.delta'
 
 print("genotype simulation paths", json.dumps({
@@ -233,8 +233,8 @@ output_delta_glow_qc_variants = simulate_prefix + "_variants_pvcf_glow_qc_varian
 output_delta_transformed = simulate_prefix + "_variants_pvcf_transformed.delta"
 
 output_delta_transformed = simulate_prefix + "_variants_pvcf_transformed.delta"
-output_hwe_path = str(dbfs_home_path / f"genomics/data/results")
-output_hwe_plot = str(dbfs_fuse_home_path / f"genomics/data/results/simulate_{n_samples}_samples_{n_variants}_hwe.png")
+output_hwe_path = str(dbfs_home_path / f"genomics/standard/data/results")
+output_hwe_plot = str(dbfs_fuse_home_path / f"genomics/standard/data/results/simulate_{n_samples}_samples_{n_variants}_hwe.png")
 
 print("quality control paths", json.dumps({
   "output_delta_glow_qc_transformers": output_delta_glow_qc_transformers,
@@ -252,13 +252,13 @@ print("quality control paths", json.dumps({
 
 # COMMAND ----------
 
-delta_path = str(dbfs_home_path / 'genomics/data/delta/simulate_'.format(user))
+delta_path = str(dbfs_home_path / 'genomics/standard/data/delta/simulate_'.format(user))
 base_variants_path = delta_path + str(n_samples) + '_samples_' + str(n_variants) + '_variants_pvcf.delta'
 variants_path = output_delta_glow_qc_transformers
 variants_fraction_path = simulate_prefix + "_variants_pvcf_glow_qc_transformers_sampled.delta"
 qc_samples_path = delta_path + str(n_samples) + '_samples_' + str(n_variants) + "_variants_pvcf_glow_qc_samples.delta"
 
-pandas_path = str(dbfs_fuse_home_path / ('genomics/data/pandas/simulate_'.format(user) + str(n_samples) + '_samples_'))
+pandas_path = str(dbfs_fuse_home_path / ('genomics/standard/data/pandas/simulate_'.format(user) + str(n_samples) + '_samples_'))
 covariates_path = pandas_path + str(n_covariates) + '_covariates.csv'
 quantitative_phenotypes_path = pandas_path + str(n_quantitative_phenotypes) + '_quantitative_phenotypes.csv'
 output_quantitative_offset = pandas_path + str(n_quantitative_phenotypes) + '_offset_quantitative_phenotypes.csv'
@@ -350,8 +350,8 @@ annotated_vcf_local = simulate_prefix_local + '_variants_test_annotated.vcf'
 os.environ['annotated_vcf_local'] = annotated_vcf_local
 
 
-variant_db_name = cleaned_username + "_variant_db"
-variant_db_quarantine_table = cleaned_username + "_variant_db.quarantine"
+variant_db_name = cleaned_username + "_standard_variant_db"
+variant_db_quarantine_table = cleaned_username + "_standard_variant_db.quarantine"
 
 output_vcf_corrupted = simulate_prefix + '_variants_test_corrupted.vcf'
 output_vcf_corrupted_local = simulate_prefix_local + '_variants_test_corrupted.vcf'
@@ -360,12 +360,12 @@ os.environ['output_vcf_corrupted_local'] = output_vcf_corrupted_local
 output_pipe_vcf = simulate_prefix + '_variants_pvcf_annotated.vcf'
 output_pipe_quarantine = simulate_prefix + '_variants_pvcf_annotated_quarantined.delta'
 
-dircache_file_path = str(dbfs_home_path / ("genomics/reference"))
+dircache_file_path = str(dbfs_home_path / ("genomics/standard/reference"))
 dbutils.fs.mkdirs(dircache_file_path)
-dircache_file_path_local = str(dbfs_fuse_home_path / "genomics/reference")
+dircache_file_path_local = str(dbfs_fuse_home_path / "genomics/standard/reference")
 os.environ['dircache_file_path_local'] = dircache_file_path_local
 
-log_path = str(dbfs_fuse_home_path / 'genomics/data/logs/')
+log_path = str(dbfs_fuse_home_path / 'genomics/standard/data/logs/')
 os.environ['log_path'] = log_path
 
 print("VEP paths", json.dumps({
@@ -391,8 +391,8 @@ print("VEP paths", json.dumps({
 
 # COMMAND ----------
 
-output_exploded_delta = str(dbfs_home_path / f'genomics/data/delta/explode_{n_samples}_samples_{n_variants}_variants_pvcf.delta')
-gff_annotations = str(dbfs_home_path / f'genomics/data/delta/gff_annotations.delta')
+output_exploded_delta = str(dbfs_home_path / f'genomics/standard/data/delta/explode_{n_samples}_samples_{n_variants}_variants_pvcf.delta')
+gff_annotations = str(dbfs_home_path / f'genomics/standard/data/delta/gff_annotations.delta')
 
 print("exploded genotype paths", json.dumps({
   "output_exploded_delta": output_exploded_delta,
@@ -407,4 +407,4 @@ print("exploded genotype paths", json.dumps({
 
 # COMMAND ----------
 
-gene_overlap_variants_delta = str(dbfs_home_path / f'genomics/data/delta/gene_overlap_variants.delta')
+gene_overlap_variants_delta = str(dbfs_home_path / f'genomics/standard/data/delta/gene_overlap_variants.delta')

@@ -130,7 +130,7 @@ display(results_df.orderBy("pvalue"))
 
 # MAGIC %r
 # MAGIC user <- dbutils.widgets.get("user")
-# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
+# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/standard/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
 # MAGIC gwas_df <- read.df(linear_gwas_results_path_confounded, source="delta")
 # MAGIC gwas_results <- select(gwas_df, c(alias(element_at(gwas_df$names, as.integer(1)), "SNP"), 
 # MAGIC                                   cast(alias(gwas_df$contigName, "CHR"), "double"), 
