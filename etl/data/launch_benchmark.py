@@ -4,3 +4,7 @@
 # COMMAND ----------
 
 # MAGIC %run ../../2_setup_metadata
+
+# COMMAND ----------
+
+

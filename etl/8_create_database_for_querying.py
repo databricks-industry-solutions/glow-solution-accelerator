@@ -43,9 +43,9 @@ spark.sql("create database if not exists {}".format(variant_db_name))
 
 # COMMAND ----------
 
-spark.sql("drop table if exists variant_db.exploded")
-spark.sql("drop table if exists variant_db.annotations")
-spark.sql("drop table if exists variant_db.pvcf")
+spark.sql("drop table if exists {0}.exploded".format(variant_db_name))
+spark.sql("drop table if exists {0}.annotations".format(variant_db_name))
+spark.sql("drop table if exists {0}.pvcf".format(variant_db_name))
 
 # COMMAND ----------
 

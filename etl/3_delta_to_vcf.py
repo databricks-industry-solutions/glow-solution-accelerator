@@ -58,8 +58,22 @@ spark.read.format("delta").load(output_delta) \
 
 # COMMAND ----------
 
-vcf_df = spark.read.format("delta").load(output_delta) \
-                          .repartition(n_partitions)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+
+# COMMAND ----------
+
+vcf_df = spark.read.format("delta").load(output_delta)
+
+# COMMAND ----------
+
+# Photon doesn't support the below repartition() operation
+# vcf_df = spark.read.format("delta").load(output_delta) \
+#                           .repartition(n_partitions)
+
+# COMMAND ----------
+
+# We are collecting all the partitions one by one onto the driver node; instead, can we use the executors to write the partitions to a temp directory
+# then assemble the files in a temp directory
 
 # COMMAND ----------
 

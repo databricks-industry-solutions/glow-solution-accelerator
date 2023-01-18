@@ -18,8 +18,8 @@
 
 # COMMAND ----------
 
-dbutils.fs.rm(dbfs_home_path_str + "genomics/", recurse=True)
-dbutils.fs.mkdirs(dbfs_home_path_str + "genomics/")
+dbutils.fs.rm(dbfs_home_path_str + "genomics/photon/", recurse=True)
+dbutils.fs.mkdirs(dbfs_home_path_str + "genomics/photon")
 
 # COMMAND ----------
 

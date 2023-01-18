@@ -229,7 +229,9 @@ display(plot_histogram(df=summary_stats_df.select("log10pValueHwe"),
 start_time = time.time()
 variant_filter_df = spark.read.format("delta").load(output_delta_glow_qc_variants)
 
-variant_filter_df = summary_stats_df.where((fx.col("alleleFrequencies").getItem(0) >= allele_freq_cutoff) & 
+# instead of re-reading summary_stats_df, which uses a UDF (and thus cannot use Photon)
+# reduced Photon clock time from 190s to 9s
+variant_filter_df = variant_filter_df.where((fx.col("alleleFrequencies").getItem(0) >= allele_freq_cutoff) & 
                                            (fx.col("alleleFrequencies").getItem(0) <= (1.0 - allele_freq_cutoff)) &
                                            (fx.col("pValueHwe") >= hwe_cutoff)
                                           )

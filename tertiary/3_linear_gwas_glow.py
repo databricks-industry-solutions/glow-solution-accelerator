@@ -128,7 +128,7 @@ display(results_df.orderBy("pvalue"))
 
 # MAGIC %r
 # MAGIC user <- dbutils.widgets.get("user")
-# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
+# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/photon/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
 # MAGIC gwas_df <- read.df(linear_gwas_results_path_confounded, source="delta")
 # MAGIC gwas_results <- select(gwas_df, c(alias(element_at(gwas_df$names, as.integer(1)), "SNP"), 
 # MAGIC                                   cast(alias(gwas_df$contigName, "CHR"), "double"), 
@@ -181,9 +181,15 @@ def filter_genotypes(genotypes_df, list_sample_ids):
   return a filtered_genotypes dataframe with samples from that list
   """
   sample_subset='\' , \''.join(list_sample_ids)
-  filtered_genotypes=genotypes_df.selectExpr("*", "filter(genotypes, g -> array_contains(array('{0}'), g.sampleId)) as genotypes2".format(sample_subset)).\
-                                  drop("genotypes").\
-                                  withColumnRenamed("genotypes2", "genotypes")
+  # In the below, we check whether the elements in one large array are present in another array
+  # Photon is able to process the filter for the first 100 elements, then hangs
+  # filtered_genotypes=genotypes_df.selectExpr("*", "filter(genotypes, g -> array_contains(array('{0}'), g.sampleId)) as genotypes2".format(sample_subset)).\
+  #                                 drop("genotypes").\
+  #                                 withColumnRenamed("genotypes2", "genotypes")
+  # Changed this into a transform that performs a shallow array process - check if element exists in both arrays, if so, keep it, otherwise, convert it to a Null
+  # apply a filter for non-null values; runs 3x-6x faster on Photon
+  filtered_genotypes=genotypes_df.withColumn("genotypes", fx.expr("transform(genotypes, g -> case when array_contains(array('{0}'), g.sampleId) then g else Null end) as transformed".format(sample_subset))).withColumn("genotypes", fx.expr("filter(genotypes, g -> g is not null)"))
+  
   return filtered_genotypes
 
 # COMMAND ----------
@@ -192,6 +198,10 @@ def filter_genotypes(genotypes_df, list_sample_ids):
 # MAGIC ##### filter genotypes
 # MAGIC 
 # MAGIC based on samples with missing phenotypes
+
+# COMMAND ----------
+
+spark.conf.set("soark.sql.parquet.columnarReaderBatchSize", 20)
 
 # COMMAND ----------
 
@@ -242,7 +252,7 @@ for num, contig in enumerate(contigs):
 # COMMAND ----------
 
 # MAGIC %r
-# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
+# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/photon/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
 # MAGIC gwas_df <- read.df(linear_gwas_results_path_confounded, source="delta")
 # MAGIC gwas_results <- select(gwas_df, c(alias(element_at(gwas_df$names, as.integer(1)), "SNP"), 
 # MAGIC                                   cast(alias(gwas_df$contigName, "CHR"), "double"), 

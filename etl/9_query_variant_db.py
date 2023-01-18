@@ -38,6 +38,7 @@ spark.conf.set("spark.sql.shuffle.partitions", "1600")
 # COMMAND ----------
 
 variants_df = spark.table("{0}.exploded".format(variant_db_name))
+variants_df_join = variants_df.select("contigName", "start").distinct()
 display(variants_df)
 
 # COMMAND ----------
@@ -102,8 +103,17 @@ spark.table("genes").count()
 
 # COMMAND ----------
 
-genes_overlap_variants_df = genes.hint("range_join", 10). \
-                                  join(variants_df, 
+# genes_overlap_variants_df = genes.hint("range_join", 10). \
+#                                   join(variants_df, 
+#                                        (variants_df.contigName == genes.contigName) &
+#                                        (variants_df.start > genes.start) & 
+#                                        (variants_df.start <= genes.end), 
+#                                        "left_semi")
+
+# COMMAND ----------
+
+genes_overlap_variants_df = genes.filter("type = 'gene'").hint("range_join", 100). \
+                                  join(variants_df_join, 
                                        (variants_df.contigName == genes.contigName) &
                                        (variants_df.start > genes.start) & 
                                        (variants_df.start <= genes.end), 

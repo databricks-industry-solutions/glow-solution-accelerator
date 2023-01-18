@@ -44,7 +44,12 @@ start_time = time.time()
 
 # COMMAND ----------
 
-vcf_df = spark.read.format("vcf").load(output_vcf) 
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+
+# COMMAND ----------
+
+# repartition by numbers 
+vcf_df = spark.read.format("vcf").load(output_vcf).repartition(int(n_partitions/20))
 
 # COMMAND ----------
 

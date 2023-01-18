@@ -31,7 +31,7 @@ from pathlib import Path
 # COMMAND ----------
 
 dbfs_home_path = Path("dbfs:/home/{}/".format(user))
-run_metadata_delta_path = str(dbfs_home_path / "genomics/data/delta/pipeline_runs_info_hail_glow.delta")
+run_metadata_delta_path = str(dbfs_home_path / "genomics/photon/data/delta/pipeline_runs_info_hail_glow.delta")
 
 # COMMAND ----------
 
