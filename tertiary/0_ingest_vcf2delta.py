@@ -20,6 +20,16 @@
 
 # COMMAND ----------
 
+spark.conf.set("spark.sql.codegen.wholeStage", False)
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### read VCF
 
@@ -36,11 +46,22 @@ start_time = time.time()
 
 # COMMAND ----------
 
-spark.read.format("vcf").load(output_vcf) \
-                        .write \
-                        .format("delta") \
-                        .mode("overwrite") \
-                        .save(output_delta_tmp)
+vcf_df = spark.read.format("vcf").load(output_vcf) 
+
+# COMMAND ----------
+
+vcf_df.write \
+      .format("delta") \
+      .mode("overwrite") \
+      .save(output_delta_tmp)
+
+# COMMAND ----------
+
+# spark.read.format("vcf").load(output_vcf) \
+#                         .write \
+#                         .format("delta") \
+#                         .mode("overwrite") \
+#                         .save(output_delta_tmp)
 
 # COMMAND ----------
 

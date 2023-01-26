@@ -44,12 +44,34 @@ spark.read.format("delta").load(output_delta) \
 
 # COMMAND ----------
 
-spark.read.format("delta").load(output_delta) \
-                          .repartition(n_partitions) \
-                          .write \
-                          .mode("overwrite") \
-                          .format("bigvcf") \
-                          .save(output_vcf)
+spark.conf.set("spark.sql.codegen.wholeStage", False)
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
+
+# COMMAND ----------
+
+vcf_df = spark.read.format("delta").load(output_delta) \
+                          .repartition(n_partitions)
+
+# COMMAND ----------
+
+vcf_df.write \
+      .mode("overwrite") \
+      .format("bigvcf") \
+      .save(output_vcf)
+
+# COMMAND ----------
+
+# spark.read.format("delta").load(output_delta) \
+#                           .repartition(n_partitions) \
+#                           .write \
+#                           .mode("overwrite") \
+#                           .format("bigvcf") \
+#                           .save(output_vcf)
 
 # COMMAND ----------
 

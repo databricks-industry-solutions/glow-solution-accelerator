@@ -29,6 +29,16 @@ spark.conf.set("spark.sql.execution.arrow.maxRecordsPerBatch", 100)
 
 # COMMAND ----------
 
+spark.conf.set("spark.sql.codegen.wholeStage", False)
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
+
+# COMMAND ----------
+
 # MAGIC %r
 # MAGIC install.packages("qqman", repos="http://cran.us.r-project.org")
 # MAGIC library(qqman)
@@ -120,7 +130,7 @@ display(results_df.orderBy("pvalue"))
 
 # MAGIC %r
 # MAGIC user <- dbutils.widgets.get("user")
-# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
+# MAGIC linear_gwas_results_path_confounded <- paste("dbfs:/home/", user, "/genomics/standard/data/delta/simulate_pvcf_linear_gwas_results_confounded.delta", sep = "")
 # MAGIC gwas_df <- read.df(linear_gwas_results_path_confounded, source="delta")
 # MAGIC gwas_results <- select(gwas_df, c(alias(element_at(gwas_df$names, as.integer(1)), "SNP"), 
 # MAGIC                                   cast(alias(gwas_df$contigName, "CHR"), "double"), 
