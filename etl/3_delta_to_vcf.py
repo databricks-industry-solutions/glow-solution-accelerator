@@ -66,9 +66,9 @@ vcf_df = spark.read.format("delta").load(output_delta)
 
 # COMMAND ----------
 
-# Photon doesn't support the below repartition() operation
-# vcf_df = spark.read.format("delta").load(output_delta) \
-#                           .repartition(n_partitions)
+# FYI Photon doesn't support the below repartition() operation
+vcf_df = spark.read.format("delta").load(output_delta) \
+                          .repartition(n_partitions)
 
 # COMMAND ----------
 
