@@ -28,6 +28,14 @@ spark = glow.register(spark)
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 variants_path = 'dbfs:/databricks-datasets/genomics/gwas/hapgen-variants.delta'
 phenotypes_path = '/dbfs/databricks-datasets/genomics/gwas/Ysim_test_simulation.csv'
 covariates_path = '/dbfs/databricks-datasets/genomics/gwas/Covs_test_simulation.csv'

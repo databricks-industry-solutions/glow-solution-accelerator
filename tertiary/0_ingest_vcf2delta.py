@@ -20,6 +20,14 @@
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### read VCF
 
@@ -36,11 +44,27 @@ start_time = time.time()
 
 # COMMAND ----------
 
-spark.read.format("vcf").load(output_vcf) \
-                        .write \
-                        .format("delta") \
-                        .mode("overwrite") \
-                        .save(output_delta_tmp)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+
+# COMMAND ----------
+
+# repartition by numbers 
+vcf_df = spark.read.format("vcf").load(output_vcf).repartition(int(n_partitions/20))
+
+# COMMAND ----------
+
+vcf_df.write \
+      .format("delta") \
+      .mode("overwrite") \
+      .save(output_delta_tmp)
+
+# COMMAND ----------
+
+# spark.read.format("vcf").load(output_vcf) \
+#                         .write \
+#                         .format("delta") \
+#                         .mode("overwrite") \
+#                         .save(output_delta_tmp)
 
 # COMMAND ----------
 

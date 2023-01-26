@@ -17,6 +17,14 @@ spark = glow.register(spark)
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 dbutils.widgets.text('variants_per_block', '1000')
 dbutils.widgets.text('sample_block_count', '10')
 

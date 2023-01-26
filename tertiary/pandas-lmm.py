@@ -17,6 +17,14 @@ spark = glow.register(spark)
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 # DBTITLE 1,Get the population annotation for samples in 1000genomes phase 3
 pop = pd.read_csv('https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20200731.ALL.ped', sep='\t')
 pop.head(5)

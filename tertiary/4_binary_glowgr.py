@@ -28,6 +28,14 @@ spark.conf.set("spark.sql.execution.arrow.maxRecordsPerBatch", 100)
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
 method = 'logistic'
 test = 'glowgr'
 library = 'glow'

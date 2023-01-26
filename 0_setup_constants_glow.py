@@ -29,6 +29,7 @@ import string
 import pandas as pd
 import numpy as np
 import os 
+import re
 
 import time
 import pytz
@@ -47,8 +48,8 @@ import matplotlib.pyplot as plt
 # COMMAND ----------
 
 #genotype matrix
-n_samples = 50000
-n_variants = 1000
+n_samples = 500000 # 500K, 1M
+n_variants = 100000 # 100K, 250K, 500K, 1M
 
 #partitions
 n_partitions = int(n_variants / 20) #good heuristic is 20 variants per partition at 500k samples
@@ -80,7 +81,7 @@ wgr_fraction = 0.025
 
 
 #chromosomes
-contigs = ['21', '22']
+contigs = ['1', '22']
 
 # COMMAND ----------
 
@@ -108,6 +109,7 @@ print("variables", json.dumps({
 # COMMAND ----------
 
 user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')
+cleaned_username = re.sub("[^a-zA-Z0-9]", "_", user.lower().split("@")[0])
 dbfs_home_path_str = "dbfs:/home/{}/".format(user)
 dbfs_fuse_home_path_str = "/dbfs/home/{}/".format(user)
 dbfs_home_path = Path("dbfs:/home/{}/".format(user))
@@ -118,7 +120,8 @@ print("data storage path constants", json.dumps({
   "dbfs_home_path": str(dbfs_home_path),
   "dbfs_fuse_home_path_str": dbfs_fuse_home_path_str,
   "dbfs_home_path_str": dbfs_home_path_str,
-  "user": user
+  "user": user,
+  "cleaned_username": cleaned_username
 }
   , indent=4))
 
@@ -347,8 +350,8 @@ annotated_vcf_local = simulate_prefix_local + '_variants_test_annotated.vcf'
 os.environ['annotated_vcf_local'] = annotated_vcf_local
 
 
-variant_db_name = "variant_db"
-variant_db_quarantine_table = "variant_db.quarantine"
+variant_db_name = cleaned_username + "_variant_db"
+variant_db_quarantine_table = cleaned_username + "_variant_db.quarantine"
 
 output_vcf_corrupted = simulate_prefix + '_variants_test_corrupted.vcf'
 output_vcf_corrupted_local = simulate_prefix_local + '_variants_test_corrupted.vcf'
@@ -396,3 +399,12 @@ print("exploded genotype paths", json.dumps({
   "gff_annotations": gff_annotations
 }
 , indent=4))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ##### gene overlap variants
+
+# COMMAND ----------
+
+gene_overlap_variants_delta = str(dbfs_home_path / f'genomics/data/delta/gene_overlap_variants.delta')

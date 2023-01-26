@@ -56,11 +56,14 @@ start_time = time.time()
 # COMMAND ----------
 
 explode_vcf_df = vcf_df.select("contigName", "start", "end", "referenceAllele", "alternateAlleles", "qual",
-   fx.explode(
-      fx.arrays_zip(fx.col("genotypes.sampleId").alias("sampleId"), 
-                    fx.col("genotypes.calls").alias("calls"))
-   ).alias("genotypes")
-). \
+# the arrays are already zipped, so can explode the main column
+# arrays_zip() is not supported by Photon
+# the performance of this stage can be improved 7x by exploding the main column and proceeding
+#    fx.explode(
+#       fx.arrays_zip(fx.col("genotypes.sampleId").alias("sampleId"), 
+#                     fx.col("genotypes.calls").alias("calls"))
+#    ).alias("genotypes")
+  fx.explode("genotypes").alias("genotypes")). \
   withColumn("sampleId", fx.col("genotypes.sampleId")). \
   withColumn("calls", fx.col("genotypes.calls")). \
   withColumn("qual", fx.rand(seed=42)*100). \

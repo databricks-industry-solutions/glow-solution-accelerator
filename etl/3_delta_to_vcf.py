@@ -20,6 +20,20 @@
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
+
+# COMMAND ----------
+
 spark.read.format("delta").load(output_delta) \
                           .limit(100) \
                           .write \
@@ -44,12 +58,38 @@ spark.read.format("delta").load(output_delta) \
 
 # COMMAND ----------
 
-spark.read.format("delta").load(output_delta) \
-                          .repartition(n_partitions) \
-                          .write \
-                          .mode("overwrite") \
-                          .format("bigvcf") \
-                          .save(output_vcf)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+
+# COMMAND ----------
+
+vcf_df = spark.read.format("delta").load(output_delta)
+
+# COMMAND ----------
+
+# FYI Photon doesn't support the below repartition() operation
+vcf_df = spark.read.format("delta").load(output_delta) \
+                          .repartition(n_partitions)
+
+# COMMAND ----------
+
+# We are collecting all the partitions one by one onto the driver node; instead, can we use the executors to write the partitions to a temp directory
+# then assemble the files in a temp directory
+
+# COMMAND ----------
+
+vcf_df.write \
+      .mode("overwrite") \
+      .format("bigvcf") \
+      .save(output_vcf)
+
+# COMMAND ----------
+
+# spark.read.format("delta").load(output_delta) \
+#                           .repartition(n_partitions) \
+#                           .write \
+#                           .mode("overwrite") \
+#                           .format("bigvcf") \
+#                           .save(output_vcf)
 
 # COMMAND ----------
 

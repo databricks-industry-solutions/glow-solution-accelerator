@@ -15,6 +15,20 @@
 
 # COMMAND ----------
 
+# MAGIC %md ##### Enforce using Photon
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.codegen.wholeStage", True)
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.optimizer.nestedSchemaPruning.enabled", True)
+spark.conf.set("spark.sql.parquet.columnarReaderBatchSize", 20)
+spark.conf.set("io.compression.codecs", "io.projectglow.sql.util.BGZFCodec")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### create database for querying
 
@@ -29,21 +43,21 @@ spark.sql("create database if not exists {}".format(variant_db_name))
 
 # COMMAND ----------
 
-spark.sql("drop table if exists variant_db.exploded")
-spark.sql("drop table if exists variant_db.annotations")
-spark.sql("drop table if exists variant_db.pvcf")
+spark.sql("drop table if exists {0}.exploded".format(variant_db_name))
+spark.sql("drop table if exists {0}.annotations".format(variant_db_name))
+spark.sql("drop table if exists {0}.pvcf".format(variant_db_name))
 
 # COMMAND ----------
 
-spark.sql("create table variant_db.exploded using delta location '{}'".format(output_exploded_delta))
+spark.sql("create table if not exists {0}.exploded using delta location '{1}'".format(variant_db_name, output_exploded_delta))
 
 # COMMAND ----------
 
-spark.sql("create table variant_db.annotations using delta location '{}'".format(gff_annotations))
+spark.sql("create table if not exists {0}.annotations using delta location '{1}'".format(variant_db_name, gff_annotations))
 
 # COMMAND ----------
 
-spark.sql("create table variant_db.pvcf using delta location '{}'".format(output_simulated_delta))
+spark.sql("create table if not exists {0}.pvcf using delta location '{1}'".format(variant_db_name, output_simulated_delta))
 
 # COMMAND ----------
 
@@ -54,8 +68,24 @@ spark.sql("create table variant_db.pvcf using delta location '{}'".format(output
 
 # COMMAND ----------
 
-display(spark.sql("OPTIMIZE variant_db.exploded ZORDER BY (contigName, start)"))
+display(spark.sql("OPTIMIZE {0}.annotations ZORDER BY (contigName, start)".format(variant_db_name)))
 
 # COMMAND ----------
 
-display(spark.sql("DESCRIBE HISTORY variant_db.exploded"))
+display(spark.sql("DESCRIBE HISTORY {0}.annotations".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("OPTIMIZE {0}.exploded ZORDER BY (contigName, start)".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("DESCRIBE HISTORY {0}.exploded".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("OPTIMIZE {0}.pvcf ZORDER BY (contigName, start)".format(variant_db_name)))
+
+# COMMAND ----------
+
+display(spark.sql("OPTIMIZE {0}.pvcf ZORDER BY (contigName, start)".format(variant_db_name)))
