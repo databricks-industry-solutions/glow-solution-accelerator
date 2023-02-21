@@ -32,7 +32,9 @@ from solacc.companion import NotebookSolutionCompanion
 
 # COMMAND ----------
 
-# MAGIC %md You need to provide your docker credential before running this accelerator. Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. Copy the block of code below, replace the name the secret scope and fill in the credentials and execute the block. After executing the code, The accelerator notebook will be able to access the credentials it needs.
+# MAGIC %md You need to provide your docker credential before running this accelerator. [Sign up](https://hub.docker.com/signup) for a Docker account if you do not already have one. Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. 
+# MAGIC 
+# MAGIC Copy the block of code below, replace the name the secret scope and fill in the credentials and execute the block. After executing the code, The accelerator notebook will be able to access the credentials it needs.
 # MAGIC 
 # MAGIC ```
 # MAGIC client = NotebookSolutionCompanion().client
