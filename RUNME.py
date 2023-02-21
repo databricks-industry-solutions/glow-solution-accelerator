@@ -53,22 +53,6 @@ from solacc.companion import NotebookSolutionCompanion
 
 # COMMAND ----------
 
-from dbacademy.dbrest import DBAcademyRestClient
-client = NotebookSolutionCompanion
-# client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/scopes/create", {"scope": "solution-accelerator-cicd"})
-client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
-  "scope": "solution-accelerator-cicd",
-  "key": "docker_username",
-  "string_value": "____"
-})
-client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
-  "scope": "solution-accelerator-cicd",
-  "key": "docker_password",
-  "string_value": "____"
-})
-
-# COMMAND ----------
-
 from dbacademy.dbgems import get_username
 docker_username = dbutils.secrets.get("solution-accelerator-cicd", "docker_username") # this secret scope is set up to enable testing only in Databricks' internal environment; please set up secret scope with your own credential
 docker_password = dbutils.secrets.get("solution-accelerator-cicd", "docker_password") # this secret scope is set up to enable testing only in Databricks' internal environment; please set up secret scope with your own credential
