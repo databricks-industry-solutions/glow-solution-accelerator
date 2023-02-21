@@ -62,7 +62,8 @@ job_json = {
         "timeout_seconds": 0,
         "tags":{
           "usage": "solacc_testing",
-          "group": "HLS"
+          "group": "HLS",
+          "accelerator": "glow-solution-accelerator"
         },
         "email_notifications": {},
         "max_concurrent_runs": 1,
@@ -469,7 +470,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
@@ -490,7 +492,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
@@ -511,7 +514,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
@@ -532,7 +536,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i3.xlarge", "MSA": "Standard_DS4_v2", "GCP": "n1-highmem-4"},
                     "enable_elastic_disk": "true",
