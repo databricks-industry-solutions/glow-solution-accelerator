@@ -3,7 +3,7 @@
 # MAGIC 🎉
 # MAGIC 
 # MAGIC **Steps**
-# MAGIC 1. Simply attach this notebook to a cluster with DBR 11.0 and above, and hit Run-All for this notebook. A multi-step job and the clusters used in the job will be created for you and hyperlinks are printed on the last block of the notebook. 
+# MAGIC 1. Simply attach this notebook to a cluster and hit Run-All for this notebook. A multi-step job and the clusters used in the job will be created for you and hyperlinks are printed on the last block of the notebook. 
 # MAGIC 
 # MAGIC 2. Run the accelerator notebooks: Feel free to explore the multi-step job page and **run the Workflow**, or **run the notebooks interactively** with the cluster to see how this solution accelerator executes. 
 # MAGIC 
@@ -29,6 +29,43 @@
 # COMMAND ----------
 
 from solacc.companion import NotebookSolutionCompanion
+
+# COMMAND ----------
+
+# MAGIC %md You need to provide your docker credential before running this accelerator. Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. Copy the block of code below, replace the name the secret scope and fill in the credentials and execute the block. After executing the code, The accelerator notebook will be able to access the credentials it needs.
+# MAGIC 
+# MAGIC ```
+# MAGIC client = NotebookSolutionCompanion().client
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/scopes/create", {"scope": "solution-accelerator-cicd"})
+# MAGIC 
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+# MAGIC   "scope": "solution-accelerator-cicd",
+# MAGIC   "key": "docker_username",
+# MAGIC   "string_value": "____"
+# MAGIC })
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+# MAGIC   "scope": "solution-accelerator-cicd",
+# MAGIC   "key": "docker_password",
+# MAGIC   "string_value": "____"
+# MAGIC })
+# MAGIC 
+# MAGIC ```
+
+# COMMAND ----------
+
+from dbacademy.dbrest import DBAcademyRestClient
+client = NotebookSolutionCompanion
+# client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/scopes/create", {"scope": "solution-accelerator-cicd"})
+client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+  "scope": "solution-accelerator-cicd",
+  "key": "docker_username",
+  "string_value": "____"
+})
+client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+  "scope": "solution-accelerator-cicd",
+  "key": "docker_password",
+  "string_value": "____"
+})
 
 # COMMAND ----------
 
