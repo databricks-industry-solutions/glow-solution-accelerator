@@ -243,4 +243,15 @@ SELECT state, NVL( zip, '9999999' ) AS zip, count(*) Num_Persons_count
 
 -- COMMAND ----------
 
+SELECT * FROM 
 
+-- COMMAND ----------
+
+SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
+    FROM (SELECT P.PERSON_ID, P.YEAR_OF_BIRTH ,CO.CONDITION_OCCURRENCE_ID, CO.CONDITION_TYPE_CONCEPT_ID, CO.VISIT_DETAIL_ID, CO.CONDITION_CONCEPT_ID, 
+                 CO.CONDITION_SOURCE_VALUE, CO.CONDITION_SOURCE_CONCEPT_ID
+          FROM person P 
+          INNER JOIN condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
+          WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440 AND P.RACE_SOURCE_VALUE = "black" AND P.ETHNICITY_SOURCE_VALUE = "hispanic")
+    GROUP BY year_of_birth
+    ORDER BY year_of_birth;
