@@ -8,8 +8,22 @@ vcf_path_chr22 = "/databricks-datasets/genomics/1kg-vcfs/ALL.chr22.phase3_shapei
 vcf_path_chr1 = "/mnt/genomics/tertiary/glow/photon/data/1kg-vcfs-autosomes/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
 vcf_path_chr21 = "/mnt/genomics/tertiary/glow/photon/data/1kg-vcfs-autosomes/ALL.chr21.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
 bgen_path_chr22 = "/databricks-datasets/genomics/1kg-bgens/1kg_chr22.bgen"
-bgen_path_chr21 = "/databricks-datasets/genomics/1kg-bgens/1kg_chr22.bgen"
-bgen_path_chr1 = "/databricks-datasets/genomics/1kg-bgens/1kg_chr22.bgen"
+bgen_path_chr21 = "/mnt/genomics/tertiary/glow/photon/data/1kg-bgens/1kg_chr21.bgen"
+bgen_path_chr1 = "/mnt/genomics/tertiary/glow/photon/data/1kg-bgens/1kg_chr1.bgen"
+gff_annotations = "/mnt/genomics/tertiary/glow/photon/data/delta/gff_annotations.delta"
+variant_db_name = "alex_barreto_variant_db"
+
+# COMMAND ----------
+
+# MAGIC %md ## Ingest ```annotations``` from Delta table populated in the ```generate_gff3_annotations``` notebook
+
+# COMMAND ----------
+
+spark.sql("create table if not exists {0}.annotations using delta location '{1}'".format(variant_db_name, gff_annotations))
+
+# COMMAND ----------
+
+spark.sql("optimize {0}.annotations zorder by (start, end)".format(variant_db_name))
 
 # COMMAND ----------
 
@@ -28,50 +42,13 @@ vcf_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.vcfs_auto
 
 # COMMAND ----------
 
-vcf_df_chr21 = (spark.read.format("vcf")
-  .load(vcf_path_chr21))
-display(vcf_df_chr21)
-
-# COMMAND ----------
-
-vcf_df_chr21 = (spark.read.format("vcf").load(vcf_path_chr21))
-vcf_df_chr21.write.format("delta").saveAsTable("alex_barreto_variant_db.vcfs_autosomes_1kg_chr21")
-
-# COMMAND ----------
-
-# MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.vcfs_autosomes_1kg_chr21 ZORDER BY (start, end)
-
-# COMMAND ----------
-
-vcf_df_chr22 = (spark.read.format("vcf")
-  .load(vcf_path_chr22))
-display(vcf_df_chr22)
-
-# COMMAND ----------
-
-vcf_df_chr22 = (spark.read.format("vcf").load(vcf_path_chr22))
-vcf_df_chr22.write.format("delta").saveAsTable("alex_barreto_variant_db.vcfs_autosomes_1kg_chr22")
-
-# COMMAND ----------
-
-# MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.vcfs_autosomes_1kg_chr22 ZORDER BY (start, end)
-
-# COMMAND ----------
-
-df = spark.read.format("bgen").load(bgen_path_chr_22)
-display(df)
-
-# COMMAND ----------
-
 variant_db_name="alex_barreto_variant_db"
 genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations
+# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE contigName = '1'
 
 # COMMAND ----------
 
@@ -101,36 +78,6 @@ genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 
 # COMMAND ----------
 
-bgen_df_chr22 = spark.read.format("bgen").schema(vcf_df_chr22.schema).load(bgen_path_chr22)
-bgen_df_chr22.write.format("delta").saveAsTable("alex_barreto_variant_db.bgen_1kg_chr22")
-
-
-# COMMAND ----------
-
-# MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.bgen_1kg_chr22 ZORDER BY (start, end)
-
-# COMMAND ----------
-
-merged_df_chr22 = vcf_df_chr22.union(bgen_df_chr22)
-
-# COMMAND ----------
-
-bgen_df_chr21 = spark.read.format("bgen").schema(vcf_df_chr21.schema).load(bgen_path_chr21)
-bgen_df_chr21.write.format("delta").saveAsTable("alex_barreto_variant_db.bgen_1kg_chr21")
-
-
-# COMMAND ----------
-
-# MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.bgen_1kg_chr21 ZORDER BY (start, end)
-
-# COMMAND ----------
-
-merged_df_chr21 = vcf_df_chr21.union(bgen_df_chr21)
-
-# COMMAND ----------
-
 bgen_df_chr1 = spark.read.format("bgen").schema(vcf_df_chr1.schema).load(bgen_path_chr1)
 bgen_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.bgen_1kg_chr1")
 
@@ -145,39 +92,65 @@ merged_df_chr1 = vcf_df_chr1.union(bgen_df_chr1)
 
 # COMMAND ----------
 
-# sanity check
-
-display(merged_df_chr1.filter((merged_df_chr1.start >= 16014028) & (merged_df_chr1.end <= 16019594)).withColumn("firstGenotype", expr("genotypes[0]")).drop("genotypes").limit(10))
-
-# COMMAND ----------
-
-display(merged_df_chr1.filter((merged_df_chr1.start >= 16014028) & (merged_df_chr1.end <= 16019594)).withColumn("firstGenotype", expr("genotypes[0]")).drop("genotypes").limit(10))
-
-# COMMAND ----------
-
 chf_variants_df_chr1 = merged_df_chr1.filter((merged_df_chr1.start >= 16014028) & (merged_df_chr1.end <= 16019594)).withColumn("firstGenotype", expr("genotypes[0]")).drop("genotypes")
 display(chf_variants_df_chr1)
 
 # COMMAND ----------
 
-# genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
-# chf_variants_df.write.format("delta").saveAsTable("{0}.chf_variants")
 chf_variants_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.chf_variants_chr1")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC -- OPTIMIZE ${0}.chf_variants ZORDER BY gene, ID, seqId
 # MAGIC OPTIMIZE alex_barreto_variant_db.chf_variants_chr1 ZORDER BY (start, end)
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC -- SELECT * FROM ${0}.chf_variants
 # MAGIC SELECT * FROM alex_barreto_variant_db.chf_variants_chr1
 
 # COMMAND ----------
 
+# MAGIC %md ## Let's look for annotations relating to these SNPs
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE contigName = '1'
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC SELECT * FROM alex_barreto_variant_db.annotations A INNER JOIN alex_barreto_variant_db.chf_variants_chr1 V WHERE A.contigName >= V.contigName AND V.START >= 16014028 AND V.END <= 16019594
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC SELECT * FROM alex_barreto_variant_db.annotations A INNER JOIN alex_barreto_variant_db.chf_variants_chr1 V WHERE A.START >= V.START AND A.END >= V.END
+
+# COMMAND ----------
+
+gff_annotations_df_chr1 = spark.table("alex_barreto_variant_db.gff_annotations_chr1")
+
+# COMMAND ----------
+
+display(gff_annotations_df_chr1)
+
+# COMMAND ----------
+
+gff_annotations_df_chf = gff_annotations_df_chr1.filter((gff_annotations_df_chr1.start >= 16014028) & (gff_annotations_df_chr1.end <= 16019594))
+display(gff_annotations_df_chf)
+
+# COMMAND ----------
+
+gff_annotations_df_chf.write.format("delta").saveAsTable("alex_barreto_variant_db.gff_annotations_chr1_chf")
+
+# COMMAND ----------
+
 # MAGIC %sql
-# MAGIC -- SELECT * FROM ${0}.chf_variants
-# MAGIC SELECT * FROM alex_barreto_variant_db.chf_variants_chr1
+# MAGIC OPTIMIZE alex_barreto_variant_db.gff_annotations_chr1_chf ZORDER BY (start, end)
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC SELECT * FROM alex_barreto_variant_db.gff_annotations_chr1_chf A INNER JOIN alex_barreto_variant_db.chf_variants_chr1 V WHERE A.START >= V.START AND A.END >= V.END
