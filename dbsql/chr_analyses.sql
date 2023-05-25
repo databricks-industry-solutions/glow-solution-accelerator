@@ -187,7 +187,7 @@ SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
 
 -- COMMAND ----------
 
-SELECT * FROM person P, condition_occurrence CO INNER JOIN P. ON CO.PERSON_ID WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440
+SELECT * FROM person P, condition_occurrence CO INNER JOIN PERSON ON CO.PERSON_ID WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440
 
 -- COMMAND ----------
 
