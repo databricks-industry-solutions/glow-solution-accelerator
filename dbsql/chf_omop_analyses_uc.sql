@@ -1,5 +1,5 @@
 -- Databricks notebook source
--- MAGIC %md # OMOP queries for CHF conditions
+-- MAGIC %md # OMOP queries for CHR conditions
 
 -- COMMAND ----------
 
@@ -9,13 +9,13 @@
 
 -- Sanity check of out OMOP531 database
 
-SELECT * FROM omop531.source_to_standard_vocab_map WHERE SOURCE_CODE_DESCRIPTION LIKE "Congestive heart failure%"
+SELECT * FROM xomics_omop.omop_531.source_to_standard_vocab_map WHERE SOURCE_CODE_DESCRIPTION LIKE "Congestive heart failure%"
 
 -- COMMAND ----------
 
 -- Sanity check of out OMOP531 database
 
-SELECT * FROM omop531.condition_occurrence WHERE CONDITION_CONCEPT_ID LIKE "4229%"
+SELECT * FROM xomics_omop.omop_531.condition_occurrence WHERE CONDITION_CONCEPT_ID LIKE "4229%"
 
 -- COMMAND ----------
 
@@ -26,10 +26,6 @@ SELECT * FROM omop531.condition_occurrence WHERE CONDITION_CONCEPT_ID LIKE "4229
 -- MAGIC It does not require prior knowledge of where in the logic of the vocabularies the entity is situated.
 -- MAGIC
 -- MAGIC The following is a sample run of the query to run a search of the Condition domain for keyword 'myocardial infarction'. The input parameters are highlighted in blue.
-
--- COMMAND ----------
-
-USE OMOP531;
 
 -- COMMAND ----------
 
@@ -53,9 +49,9 @@ SELECT
 		NULL Entity_Mapping_Type, 
 		C.valid_start_date, 
 		C.valid_end_date 
-	  FROM concept C 
-	  JOIN vocabulary V ON C.vocabulary_id = V.vocabulary_id 
-	  LEFT JOIN concept_synonym S ON C.concept_id = S.concept_id 
+	  FROM xomics_omop.omop_531.concept C 
+	  JOIN xomics_omop.omop_531.vocabulary V ON C.vocabulary_id = V.vocabulary_id 
+	  LEFT JOIN xomics_omop.omop_531.concept_synonym S ON C.concept_id = S.concept_id 
 	  WHERE 
 	    (C.vocabulary_id IN ('SNOMED', 'MedDRA') OR LOWER(C.concept_class_id) = 'clinical finding' ) AND 
 		C.concept_class_id IS NOT NULL AND 
@@ -87,7 +83,7 @@ SELECT
 		WHEN 'MedDRA' THEN 'Yes'
 		ELSE 'No' 
 	  END Is_Disease_Concept_flag 
-	FROM concept C, vocabulary V 
+	FROM xomics_omop.omop_531.concept C, xomics_omop.omop_531.vocabulary V 
 	WHERE 
 	  C.concept_id = 4229440 AND -- CHF
 	  C.vocabulary_id = V.vocabulary_id AND 
@@ -108,7 +104,7 @@ SELECT
 		WHEN 'MedDRA' THEN 'Yes'
 		ELSE 'No' 
 	  END Is_Disease_Concept_flag 
-	FROM concept C, vocabulary V 
+	FROM xomics_omop.omop_531.concept C, xomics_omop.omop_531.vocabulary V 
 	WHERE 
 	  C.concept_id = 4023479 AND -- CHF
 	  C.vocabulary_id = V.vocabulary_id AND 
@@ -135,11 +131,11 @@ SELECT DISTINCT
 	  C2.vocabulary_id target_Concept_Vocab_ID,
 	  VT.vocabulary_name target_Concept_Vocab_Name
 	FROM
-	  concept_relationship cr,
-	  concept c1,
-	  concept c2,
-	  vocabulary VS,
-	  vocabulary VT
+	  xomics_omop.omop_531.concept_relationship cr,
+	  xomics_omop.omop_531.concept c1,
+	  xomics_omop.omop_531.concept c2,
+	  xomics_omop.omop_531.vocabulary VS,
+	  xomics_omop.omop_531.vocabulary VT
 	WHERE
 	  cr.concept_id_1 = c1.concept_id AND
 	  cr.relationship_id = 'Maps to' AND
@@ -156,15 +152,15 @@ SELECT DISTINCT
 
 -- COMMAND ----------
 
--- MAGIC %md ## CHF Occurrence in out OMOP database
+-- MAGIC %md ## CHR Occurrence in out OMOP database
 
 -- COMMAND ----------
 
-SELECT * FROM condition_occurrence WHERE CONDITION_SOURCE_CONCEPT_ID = 4023479
+SELECT * FROM xomics_omop.omop_531.condition_occurrence WHERE CONDITION_SOURCE_CONCEPT_ID = 4023479
 
 -- COMMAND ----------
 
-SELECT * FROM condition_occurrence WHERE CONDITION_SOURCE_CONCEPT_ID = 4229440
+SELECT * FROM xomics_omop.omop_531.condition_occurrence WHERE CONDITION_SOURCE_CONCEPT_ID = 4229440
 
 -- COMMAND ----------
 
@@ -172,28 +168,28 @@ SELECT * FROM condition_occurrence WHERE CONDITION_SOURCE_CONCEPT_ID = 4229440
 
 -- COMMAND ----------
 
-DESCRIBE TABLE PERSON
+DESCRIBE TABLE xomics_omop.omop_531.PERSON
 
 -- COMMAND ----------
 
-SELECT * FROM person P WHERE P.LOCATION_ID IS NOT NULL --INNER JOIN location L ON P.LOCATION_ID = L.LOCATION_ID 
+SELECT * FROM xomics_omop.omop_531.person P WHERE P.LOCATION_ID IS NOT NULL --INNER JOIN location L ON P.LOCATION_ID = L.LOCATION_ID 
 
 -- COMMAND ----------
 
 SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
-    FROM person
+    FROM xomics_omop.omop_531.person
     GROUP BY year_of_birth
     ORDER BY year_of_birth;
 
 -- COMMAND ----------
 
-SELECT * FROM person P, condition_occurrence CO INNER JOIN PERSON ON CO.PERSON_ID WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440
+-- SELECT * FROM xomics_omop.omop_531.condition_occurrence CO INNER JOIN xomics_omop.omop_531.person P ON CO.PERSON_ID WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440
 
 -- COMMAND ----------
 
 SELECT P.PERSON_ID, P.YEAR_OF_BIRTH ,CO.CONDITION_OCCURRENCE_ID, CO.CONDITION_TYPE_CONCEPT_ID, CO.VISIT_DETAIL_ID, CO.CONDITION_CONCEPT_ID, CO.CONDITION_SOURCE_VALUE, CO.CONDITION_SOURCE_CONCEPT_ID
-FROM person P 
-INNER JOIN condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
+FROM xomics_omop.omop_531.person P 
+INNER JOIN xomics_omop.omop_531.condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
 WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440
 AND P.RACE_SOURCE_VALUE = "black" 
 
@@ -202,8 +198,8 @@ AND P.RACE_SOURCE_VALUE = "black"
 SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
     FROM (SELECT P.PERSON_ID, P.YEAR_OF_BIRTH ,CO.CONDITION_OCCURRENCE_ID, CO.CONDITION_TYPE_CONCEPT_ID, CO.VISIT_DETAIL_ID, CO.CONDITION_CONCEPT_ID, 
                  CO.CONDITION_SOURCE_VALUE, CO.CONDITION_SOURCE_CONCEPT_ID
-          FROM person P 
-          INNER JOIN condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
+          FROM xomics_omop.omop_531.person P 
+          INNER JOIN xomics_omop.omop_531.condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
           WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440 AND P.RACE_SOURCE_VALUE = "black")
     GROUP BY year_of_birth
     ORDER BY year_of_birth;
@@ -211,8 +207,8 @@ SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
 -- COMMAND ----------
 
 SELECT P.PERSON_ID, P.YEAR_OF_BIRTH ,CO.CONDITION_OCCURRENCE_ID, CO.CONDITION_TYPE_CONCEPT_ID, CO.VISIT_DETAIL_ID, CO.CONDITION_CONCEPT_ID, CO.CONDITION_SOURCE_VALUE, CO.CONDITION_SOURCE_CONCEPT_ID
-FROM person P 
-INNER JOIN condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
+FROM xomics_omop.omop_531.person P 
+INNER JOIN xomics_omop.omop_531.condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
 WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440
 AND P.RACE_SOURCE_VALUE = "black" AND P.ETHNICITY_SOURCE_VALUE = "hispanic"
 
@@ -221,8 +217,8 @@ AND P.RACE_SOURCE_VALUE = "black" AND P.ETHNICITY_SOURCE_VALUE = "hispanic"
 SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
     FROM (SELECT P.PERSON_ID, P.YEAR_OF_BIRTH ,CO.CONDITION_OCCURRENCE_ID, CO.CONDITION_TYPE_CONCEPT_ID, CO.VISIT_DETAIL_ID, CO.CONDITION_CONCEPT_ID, 
                  CO.CONDITION_SOURCE_VALUE, CO.CONDITION_SOURCE_CONCEPT_ID
-          FROM person P 
-          INNER JOIN condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
+          FROM xomics_omop.omop_531.person P 
+          INNER JOIN xomics_omop.omop_531.condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
           WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440 AND P.RACE_SOURCE_VALUE = "black" AND P.ETHNICITY_SOURCE_VALUE = "hispanic")
     GROUP BY year_of_birth
     ORDER BY year_of_birth;
@@ -230,8 +226,8 @@ SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
 -- COMMAND ----------
 
 SELECT state, NVL( zip, '9999999' ) AS zip, count(*) Num_Persons_count
-    FROM person 
-    LEFT OUTER JOIN location
+    FROM xomics_omop.omop_531.person 
+    LEFT OUTER JOIN xomics_omop.omop_531.location
     USING( location_id )
     GROUP BY state, NVL( zip, '9999999' )
     ORDER BY 1, 2;
@@ -243,15 +239,15 @@ SELECT state, NVL( zip, '9999999' ) AS zip, count(*) Num_Persons_count
 
 -- COMMAND ----------
 
-SELECT * FROM 
+
 
 -- COMMAND ----------
 
 SELECT year_of_birth, COUNT(person_id) AS Num_Persons_count
     FROM (SELECT P.PERSON_ID, P.YEAR_OF_BIRTH ,CO.CONDITION_OCCURRENCE_ID, CO.CONDITION_TYPE_CONCEPT_ID, CO.VISIT_DETAIL_ID, CO.CONDITION_CONCEPT_ID, 
                  CO.CONDITION_SOURCE_VALUE, CO.CONDITION_SOURCE_CONCEPT_ID
-          FROM person P 
-          INNER JOIN condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
+          FROM xomics_omop.omop_531.person P 
+          INNER JOIN xomics_omop.omop_531.condition_occurrence CO ON P.PERSON_ID = CO.PERSON_ID 
           WHERE CO.CONDITION_SOURCE_CONCEPT_ID = 4229440 AND P.RACE_SOURCE_VALUE = "black" AND P.ETHNICITY_SOURCE_VALUE = "hispanic")
     GROUP BY year_of_birth
     ORDER BY year_of_birth;

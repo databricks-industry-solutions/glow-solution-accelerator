@@ -11,7 +11,8 @@ bgen_path_chr22 = "/databricks-datasets/genomics/1kg-bgens/1kg_chr22.bgen"
 bgen_path_chr21 = "/mnt/genomics/tertiary/glow/photon/data/1kg-bgens/1kg_chr21.bgen"
 bgen_path_chr1 = "/mnt/genomics/tertiary/glow/photon/data/1kg-bgens/1kg_chr1.bgen"
 gff_annotations = "/mnt/genomics/tertiary/glow/photon/data/delta/gff_annotations.delta"
-variant_db_name = "alex_barreto_variant_db"
+catalog_name = "xomics_gwas"
+variant_db_name = f"{catalog_name}.alex_barreto_variant_db"
 
 # COMMAND ----------
 
@@ -19,11 +20,11 @@ variant_db_name = "alex_barreto_variant_db"
 
 # COMMAND ----------
 
-spark.sql("create table if not exists {0}.annotations using delta location '{1}'".format(variant_db_name, gff_annotations))
+# spark.sql("create table if not exists {0}.annotations using delta location '{1}'".format(variant_db_name, gff_annotations))
 
 # COMMAND ----------
 
-spark.sql("optimize {0}.annotations zorder by (start, end)".format(variant_db_name))
+# spark.sql("optimize {0}.annotations zorder by (start, end)".format(variant_db_name))
 
 # COMMAND ----------
 
@@ -34,22 +35,21 @@ display(vcf_df_chr1)
 
 # vcf_df_chr1 = (spark.read.format("vcf").load(vcf_path_chr1))
 # vcf_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.vcfs_autosomes_1kg_chr1")
-vcf_df_chr1 = spark.table("alex_barreto_variant_db.vcfs_autosomes_1kg_chr1") 
+vcf_df_chr1 = spark.sql("SELECT * FROM alex_barreto_variant_db.vcfs_autosomes_1kg_chr1") 
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.vcfs_autosomes_1kg_chr1 ZORDER BY (start, end)
+# MAGIC -- OPTIMIZE alex_barreto_variant_db.vcfs_autosomes_1kg_chr1 ZORDER BY (start, end)
 
 # COMMAND ----------
 
-variant_db_name="alex_barreto_variant_db"
 genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE contigName = '1'
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations WHERE contigName = '1'
 
 # COMMAND ----------
 
@@ -60,7 +60,7 @@ genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE gene LIKE "%ACTN2%" OR gene LIKE "ADRB2%" OR gene LIKE "%HSPB7%"
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations WHERE gene LIKE "%ACTN2%" OR gene LIKE "ADRB2%" OR gene LIKE "%HSPB7%"
 
 # COMMAND ----------
 
@@ -71,7 +71,7 @@ genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE gene LIKE "ADRB2%" OR gene LIKE "%HSPB7%"
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations WHERE gene LIKE "ADRB2%" OR gene LIKE "%HSPB7%"
 
 # COMMAND ----------
 
@@ -85,12 +85,12 @@ genes = spark.sql("select * from {0}.annotations".format(variant_db_name))
 
 # bgen_df_chr1 = spark.read.format("bgen").schema(vcf_df_chr1.schema).load(bgen_path_chr1)
 # bgen_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.bgen_1kg_chr1")
-bgen_df_chr1 = spark.table("alex_barreto_variant_db.bgen_1kg_chr1")
+bgen_df_chr1 = spark.sql("SELECT * FROM xomics_gwas.alex_barreto_variant_db.bgen_1kg_chr1")
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.bgen_1kg_chr1 ZORDER BY (start, end)
+# MAGIC -- OPTIMIZE xomics_gwas.alex_barreto_variant_db.bgen_1kg_chr1 ZORDER BY (start, end)
 
 # COMMAND ----------
 
@@ -103,17 +103,18 @@ display(chf_variants_df_chr1)
 
 # COMMAND ----------
 
-chf_variants_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.chf_variants_chr1")
+# chf_variants_df_chr1.write.format("delta").mode("overwrite").saveAsTable("xomics_gwas.alex_barreto_variant_db.chf_variants_chr1")
+chf_variants_df_chr1 = spark.sql("SELECT * FROM xomics_gwas.alex_barreto_variant_db.chf_variants_chr1")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC OPTIMIZE alex_barreto_variant_db.chf_variants_chr1 ZORDER BY (start, end)
+# MAGIC -- OPTIMIZE xomics_gwas.alex_barreto_variant_db.chf_variants_chr1 ZORDER BY (start, end)
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.chf_variants_chr1
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.chf_variants_chr1
 
 # COMMAND ----------
 
@@ -122,21 +123,21 @@ chf_variants_df_chr1.write.format("delta").saveAsTable("alex_barreto_variant_db.
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE contigName = '1'
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations WHERE contigName = '1'
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations A INNER JOIN alex_barreto_variant_db.chf_variants_chr1 V WHERE A.contigName >= V.contigName AND V.START >= 16014028 AND V.END <= 16019594
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations A INNER JOIN xomics_gwas.alex_barreto_variant_db.chf_variants_chr1 V WHERE A.contigName >= V.contigName AND V.START >= 16014028 AND V.END <= 16019594
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations A INNER JOIN alex_barreto_variant_db.chf_variants_chr1 V WHERE A.START >= V.START AND A.END >= V.END
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations A INNER JOIN xomics_gwas.alex_barreto_variant_db.chf_variants_chr1 V WHERE A.START >= V.START AND A.END >= V.END
 
 # COMMAND ----------
 
-gff_annotations_df_chr1 = spark.table("alex_barreto_variant_db.gff_annotations_chr1")
+gff_annotations_df_chr1 = spark.table("xomics_gwas.alex_barreto_variant_db.gff_annotations_chr1")
 
 # COMMAND ----------
 
@@ -149,17 +150,18 @@ display(gff_annotations_df_chf)
 
 # COMMAND ----------
 
-gff_annotations_df_chf.write.format("delta").saveAsTable("alex_barreto_variant_db.gff_annotations_chr1_chf")
+# gff_annotations_df_chf.write.format("delta").mode("overwrite").saveAsTable("xomics_gwas.alex_barreto_variant_db.gff_annotations_chr1_chf")
+gff_annotations_df_chf = spark.sql("SELECT * FROM xomics_gwas.alex_barreto_variant_db.gff_annotations_chr1_chf")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC OPTIMIZE alex_barreto_variant_db.gff_annotations_chr1_chf ZORDER BY (start, end)
+# MAGIC -- OPTIMIZE xomics_gwas.alex_barreto_variant_db.gff_annotations_chr1_chf ZORDER BY (start, end)
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC SELECT * FROM alex_barreto_variant_db.gff_annotations_chr1_chf A INNER JOIN alex_barreto_variant_db.chf_variants_chr1 V WHERE A.START >= V.START AND A.END >= V.END
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.gff_annotations_chr1_chf A INNER JOIN xomics_gwas.alex_barreto_variant_db.chf_variants_chr1 V WHERE A.START >= V.START AND A.END >= V.END
 
 # COMMAND ----------
 
@@ -171,21 +173,21 @@ gff_annotations_df_chf.write.format("delta").saveAsTable("alex_barreto_variant_d
 
 # COMMAND ----------
 
-bgen_df_chr22 = spark.table("alex_barreto_variant_db.bgen_1kg_chr22")
+bgen_df_chr22 = spark.sql("SELECT * FROM xomics_gwas.alex_barreto_variant_db.bgen_1kg_chr22")
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.bgen_1kg_chr22 ZORDER BY (start, end)
+# MAGIC -- OPTIMIZE xomics_gwas.alex_barreto_variant_db.bgen_1kg_chr22 ZORDER BY (start, end)
 
 # COMMAND ----------
 
-vcf_df_chr22 = spark.table("alex_barreto_variant_db.vcfs_autosomes_1kg_chr22")
+vcf_df_chr22 = spark.sql("SELECT * FROM xomics_gwas.alex_barreto_variant_db.vcfs_autosomes_1kg_chr22")
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC OPTIMIZE alex_barreto_variant_db.vcfs_autosomes_1kg_chr22 ZORDER BY (start, end)
+# MAGIC -- OPTIMIZE xomics_gwas.alex_barreto_variant_db.vcfs_autosomes_1kg_chr22 ZORDER BY (start, end)
 
 # COMMAND ----------
 
@@ -198,7 +200,7 @@ merged_df_chr22 = vcf_df_chr22.union(bgen_df_chr22)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE gene LIKE "ZEP2%"
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations WHERE gene LIKE "ZEP2%"
 
 # COMMAND ----------
 
@@ -211,7 +213,7 @@ merged_df_chr22 = vcf_df_chr22.union(bgen_df_chr22)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations WHERE gene LIKE "SHANK3%"
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations WHERE gene LIKE "SHANK3%"
 
 # COMMAND ----------
 
@@ -227,46 +229,13 @@ merged_df_chr22.createOrReplaceTempView("chr22_variants")
 
 # COMMAND ----------
 
-# MAGIC %md ##### One of the SNPs of interest is ```rs9616915``` which is being analyzed for significant association with autism, bipolar disorder
+pms_variants_df_chr22 = merged_df_chr22.filter((merged_df_chr22.start >= 16014028) & (merged_df_chr22.end <= 16019594)).withColumn("firstGenotype", expr("genotypes[0]")).drop("genotypes")
+display(chf_variants_df_chr1)
 
 # COMMAND ----------
 
-# MAGIC %sql 
-# MAGIC SELECT * FROM chr22_variants WHERE contigName = '22' AND array_contains(names, 'rs9616915')  
-
-# COMMAND ----------
-
-pms_variants_df_chr22 = merged_df_chr22.filter((merged_df_chr22.start >= 51117579) & (merged_df_chr22.end <= 51117580)).withColumn("firstGenotype", expr("genotypes[0]")).drop("genotypes")
-display(pms_variants_df_chr22)
-
-# COMMAND ----------
-
-pms_variants_df_chr22.write.format("delta").saveAsTable("alex_barreto_variant_db.pms_variants_chr22")
-
-# COMMAND ----------
-
-gff_annotations_df1 = spark.table("alex_barreto_variant_db.annotations")
-gff_annotations_df_chr22 = gff_annotations_df1.filter(gff_annotations_df1.contigName == '22')
-display(gff_annotations_df_chr22)
-gff_annotations_df_chr22.write.format("delta").saveAsTable("alex_barreto_variant_db.gff_annotations_chr22")
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC OPTIMIZE alex_barreto_variant_db.gff_annotations_chr22 ZORDER BY (start, end)
-
-# COMMAND ----------
-
-gff_annotations_df_chr22 = spark.table("alex_barreto_variant_db.gff_annotations_chr22")
-
-# COMMAND ----------
-
-# MAGIC %md 51117579
-
-# COMMAND ----------
-
-# MAGIC %sql 
-# MAGIC SELECT * FROM alex_barreto_variant_db.gff_annotations_chr22 WHERE start >= 50117579 AND END <= 50127580
+# pms_variants_df_chr22.write.format("delta").mode("overwrite").saveAsTable("xomics_gwas.alex_barreto_variant_db.pms_variants_chr22")
+pms_variants_df_chr22 = spark.sql("SELECT * FROM xomics_gwas.alex_barreto_variant_db.pms_variants_chr22")
 
 # COMMAND ----------
 
@@ -275,4 +244,13 @@ gff_annotations_df_chr22 = spark.table("alex_barreto_variant_db.gff_annotations_
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC SELECT * FROM alex_barreto_variant_db.annotations A INNER JOIN alex_barreto_variant_db.pms_variants_chr22 V WHERE A.contigName >= V.contigName AND V.START >= 51117579 AND V.END <= 51117580
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.gff_annotations_chr22 WHERE start >= 50117579 AND END <= 50127580
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC SELECT * FROM xomics_gwas.alex_barreto_variant_db.annotations A INNER JOIN xomics_gwas.alex_barreto_variant_db.pms_variants_chr22 V WHERE A.contigName >= V.contigName AND V.START >= 51117579 AND V.END <= 51117580
+
+# COMMAND ----------
+
+
