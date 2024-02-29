@@ -3,7 +3,7 @@
 # MAGIC 🎉
 # MAGIC 
 # MAGIC **Steps**
-# MAGIC 1. Simply attach this notebook to a cluster with DBR 11.0 and above, and hit Run-All for this notebook. A multi-step job and the clusters used in the job will be created for you and hyperlinks are printed on the last block of the notebook. 
+# MAGIC 1. Simply attach this notebook to a cluster and hit Run-All for this notebook. A multi-step job and the clusters used in the job will be created for you and hyperlinks are printed on the last block of the notebook. 
 # MAGIC 
 # MAGIC 2. Run the accelerator notebooks: Feel free to explore the multi-step job page and **run the Workflow**, or **run the notebooks interactively** with the cluster to see how this solution accelerator executes. 
 # MAGIC 
@@ -32,6 +32,29 @@ from solacc.companion import NotebookSolutionCompanion
 
 # COMMAND ----------
 
+# MAGIC %md You need to provide your docker credential before running this accelerator. [Sign up](https://hub.docker.com/signup) for a Docker account if you do not already have one. Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. 
+# MAGIC 
+# MAGIC Copy the block of code below, replace the name the secret scope and fill in the credentials and execute the block. After executing the code, The accelerator notebook will be able to access the credentials it needs.
+# MAGIC 
+# MAGIC ```
+# MAGIC client = NotebookSolutionCompanion().client
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/scopes/create", {"scope": "solution-accelerator-cicd"})
+# MAGIC 
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+# MAGIC   "scope": "solution-accelerator-cicd",
+# MAGIC   "key": "docker_username",
+# MAGIC   "string_value": "____"
+# MAGIC })
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+# MAGIC   "scope": "solution-accelerator-cicd",
+# MAGIC   "key": "docker_password",
+# MAGIC   "string_value": "____"
+# MAGIC })
+# MAGIC 
+# MAGIC ```
+
+# COMMAND ----------
+
 from dbacademy.dbgems import get_username
 docker_username = dbutils.secrets.get("projectglow", "docker_username") # this secret scope is set up to enable testing only in Databricks' internal environment; please set up secret scope with your own credential
 docker_password = dbutils.secrets.get("projectglow", "docker_password") # this secret scope is set up to enable testing only in Databricks' internal environment; please set up secret scope with your own credential
@@ -39,7 +62,8 @@ job_json = {
         "timeout_seconds": 0,
         "tags":{
           "usage": "solacc_testing",
-          "group": "HLS"
+          "group": "HLS",
+          "accelerator": "glow-solution-accelerator"
         },
         "email_notifications": {},
         "max_concurrent_runs": 1,
@@ -446,7 +470,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i4i.16xlarge", "MSA": "Standard_L16as_v3", "GCP": "n2-highmem-16"},
                     "enable_elastic_disk": "true",
@@ -467,7 +492,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "10.4.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i4i.16xlarge", "MSA": "Standard_L16as_v3", "GCP": "n2-highmem-16"},
                     "enable_elastic_disk": "true",
@@ -509,7 +535,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i4i.8xlarge", "MSA": "Standard_L8as_v3", "GCP": "n2-highmem-8"},
                     "enable_elastic_disk": "true",
@@ -530,7 +557,8 @@ job_json = {
                     "cluster_name": "",
                     "spark_version": "9.1.x-scala2.12",
                     "spark_conf": {
-                        "spark.databricks.delta.preview.enabled": "true"
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.delta.formatCheck.enabled": "false"
                     },
                     "node_type_id": {"AWS": "i4i.8xlarge", "MSA": "Standard_L8as_v3", "GCP": "n2-highmem-8"},
                     "enable_elastic_disk": "true",
